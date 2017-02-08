@@ -1,0 +1,11 @@
+[template]
+src = "nsupdate.cfg.tmpl"
+dest = "/tmp/nsupdate.cfg"
+owner = "root"
+mode = "0644"
+keys = [
+  "/stacks",
+  "/self"
+]
+
+reload_cmd ="/usr/bin/nsupdate /tmp/nsupdate.cfg"

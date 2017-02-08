@@ -1,0 +1,14 @@
+server {{getenv "DNS_SERVER"}}
+{{range $s, $stack_name := ls "/stacks"}}
+    {{range $i, $service_name := ls (printf "/stacks/%s/services" $stack_name)}}
+        {{if exists (printf "/stacks/%s/services/%s/labels/io.rancher_haproxy.server_names" $stack_name $service_name)}}
+            {{$service_names := split ( getv (printf "/stacks/%s/services/%s/labels/io.rancher_haproxy.server_names" $stack_name $service_name ) ) "," }}
+            {{range $s_n, $name := $service_names }}
+update delete {{$name}}.
+update add {{$name}}. 3600 A {{getv "/self/host/agent_ip"}}
+            {{end}}
+        {{end}}
+    {{end}}
+{{end}}
+send
+quit
